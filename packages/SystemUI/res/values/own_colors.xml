@@ -19,4 +19,7 @@
 	<color name="system_secondary_color">@*android:color/material_pixel_blue_light</color>
 	<color name="system_accent_color">@*android:color/material_pixel_blue_bright</color>
 
+	<!-- Network speed indicator -->
+    <color name="status_bar_traffic_color">#FFFFFFFF</color>
+
  </resources>
