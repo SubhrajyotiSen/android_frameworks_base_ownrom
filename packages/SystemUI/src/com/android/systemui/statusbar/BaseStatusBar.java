@@ -51,6 +51,7 @@ import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.hardware.SensorManager;
 import android.media.session.MediaController;
 import android.net.Uri;
 import android.os.AsyncTask;
