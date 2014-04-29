@@ -219,4 +219,11 @@
   <string name="clear_recents">Sluit alle apps</string>
   <!-- GA Gesture -->
   <string name="gestures_message">Teken hier uw gebaar</string>
+  <!-- App sidebar -->
+  <string name="default_folder_text">Map</string>
+  <string name="title_activity_sidebar_configuration">Appbalk in houd set-up</string>
+  <string name="action_save">Opslaan</string>
+  <string name="toast_items_saved">Appbalk is opgeslagen.</string>
+  <string name="content_setup_instructions">Voeg items toe door rechts op een item lang te drukken en ze hier naar toe te slepen.\n\nCombineer items door een ander item op een bestaande te slepen.\n\nOm een item te verwijderen, sleept u ze simpel uit de \@appbalk.</string>
+  <string name="content_setup_dismiss">Begrepen</string>
 </resources>
