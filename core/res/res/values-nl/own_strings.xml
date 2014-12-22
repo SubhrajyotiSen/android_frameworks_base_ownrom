@@ -191,4 +191,6 @@
   <string name="uicc_hot_swapped_event_title">Simkaarten zijn veranderd</string>
   <string name="uicc_hot_swapped_event_text">Tik om standaardinstellingen van simkaart in te stellen</string>
   <string name="reboot_systemui">Herstart SystemUI</string>
+  <!-- Slimseekbar -->
+  <string name="default_string">Standaard</string>
 </resources>

@@ -225,4 +225,7 @@
     <string name="uicc_hot_swapped_event_text">Tap to set SIM card default preferences</string>
 	<!-- Button to soft reboot the device, within the Reboot Options dialog -->
 	<string name="reboot_systemui">Restart SystemUI</string>
+    <!-- Slimseekbar -->
+    <string name="default_string">Default</string>
+    
 </resources>
