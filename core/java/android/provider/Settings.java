@@ -3693,6 +3693,12 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIFICATION_APP_ICON_BG_COLOR = "notification_app_icon_bg_color";
+		 
+		/**
+         * Color of the clear all icon in the notification drawer
+         * @hide
+         */
+        public static final String NOTIFICATION_DRAWER_CLEAR_ALL_ICON_COLOR = "nd_clear_all_icon_color";
 
         /**
          * Color of the notification text
