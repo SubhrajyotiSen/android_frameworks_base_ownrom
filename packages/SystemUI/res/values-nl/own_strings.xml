@@ -237,6 +237,6 @@
   <string name="task_manager_title">Taak beheer</string>
   <string name="message_switch_fail">Kan niet overschakelen naar deze taak, omdat deze geen interface heeft.</string>
   <string name="tasklist_killall">Sluit alles</string>
-  <string name="tasklist_memory_usage">"Vrij/Totaal geheugen: [<xliff:g id="number">%s</xliff:g>] / [<xliff:g id="name">%s</xliff:g>]"</string>
+  <string name="tasklist_memory_usage">"Vrij/Totaal geheugen: <xliff:g id="number">%s</xliff:g> / <xliff:g id="name">%s</xliff:g>"</string>
   <string name="message_keep_one_launcher">Tenminste 1 thuis activiteit dient open te zijn!</string>
 </resources>
