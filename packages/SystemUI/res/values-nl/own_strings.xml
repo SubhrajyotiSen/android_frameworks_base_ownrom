@@ -179,4 +179,10 @@
   <string name="dynamic_qs_tile_su_label">Root-toegang</string>
   <string name="fingerprint_try_again_hint">Opnieuw scannen a.u.b.</string>
   <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
+  <string name="default_folder_text">Map</string>
+  <string name="action_save">Opslaan</string>
+  <string name="toast_items_saved">Appbar instellingen zijn opgeslagen.</string>
+  <string name="content_setup_instructions">Voeg onderdelen toe door lang te drukken op elk gewenst item aan de rechter kant en hem te verslepen.\n\nCombineer items in een map door ze simpelweg los te laten op een bestaand item.\n\nOm te verwijderen veeg ze simpel weg \@appbar.</string>
+  <string name="content_setup_dismiss">Doorgaan</string>
+  <string name="toast_not_installed">App is niet geinstalleerd</string>  
 </resources>
