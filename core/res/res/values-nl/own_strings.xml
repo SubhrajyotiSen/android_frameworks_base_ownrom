@@ -230,4 +230,12 @@
   <string name="animation_grow_shrink_bottom">Groei in (Van onder)</string>
   <string name="animation_grow_shrink_left">Groei in (Van Links)</string>
   <string name="animation_grow_shrink_right">Groei in (Van Rechts)</string>
+  <string name="floating_window_snap_top">Snap boven</string>
+  <string name="floating_window_snap_bottom">Snap onder</string>
+  <string name="floating_window_snap_left">Snap links</string>
+  <string name="floating_window_snap_right">Snap rechts</string>
+  <string name="floating_window_minimize">Minimaliseer</string>
+  <string name="setting_confirmation_ask_me_later">Vraag later</string>
+  <string name="setting_confirmation_yes">Ja</string>
+  <string name="setting_confirmation_no">Nee</string>
 </resources>
