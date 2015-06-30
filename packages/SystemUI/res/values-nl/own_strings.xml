@@ -118,5 +118,6 @@
   <string name="status_bar_recent_floating_item_title">Floating modes</string>  
   <string name="quick_settings_slim_floats_on">Slim Floats Ingeschakeld</string>
   <string name="quick_settings_slim_floats_off">Slim Floats Uitgeschakeld</string>
+  <string name="battery_saver_dismiss_title">Verberg</string>
 
 </resources>
