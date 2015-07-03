@@ -346,8 +346,8 @@
    <!-- Fingerprint -->
    <string name="fingerprint_try_again_hint">Please scan again</string>
 
-    <!-- Title shown in recents popup for showing app in floating mode -->
-    <string name="status_bar_recent_floating_item_title">Floating mode</string>  
+    <!-- Title shown in recents popup for showing app luanch in floating mode -->
+    <string name="recent_float_mode_title">Floating mode</string> 
     
     <!-- Slim Action floats tile -->
     <string name="quick_settings_slim_floats_on">Slim Floats Enabled</string>
