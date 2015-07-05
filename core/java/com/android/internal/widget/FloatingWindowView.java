@@ -86,8 +86,8 @@ public class FloatingWindowView extends RelativeLayout {
         if (mTitleBarHeader == null
             || mTitleBarClose == null
             || mTitleBarMore == null
-            || mTitleBarMin == null
             || mTitleBarMax == null
+            || mTitleBarMin == null
             || mAppLabel == null
             || mDividerViews == null) {
             return;
@@ -96,7 +96,7 @@ public class FloatingWindowView extends RelativeLayout {
         mTitleBarClose.setImageDrawable(mResource.getDrawable(R.drawable.ic_floating_window_close));
         mTitleBarClose.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                activity.finishAndRemoveTask();
+                activity.finish();
             }
         });
 
@@ -241,16 +241,14 @@ public class FloatingWindowView extends RelativeLayout {
 
     public void setFloatingColorFilter(int color) {
         if (mTitleBarClose == null
-            || mTitleBarMin == null
             || mTitleBarMax == null
+            || mTitleBarMin == null
             || mTitleBarMore == null
             || mDividerViews == null) {
             return;
         }
         mTitleBarMore.setColorFilter(color, Mode.SRC_ATOP);
         mTitleBarClose.setColorFilter(color, Mode.SRC_ATOP);
-        mTitleBarMin.setColorFilter(color, Mode.SRC_ATOP);
-        mTitleBarMax.setColorFilter(color, Mode.SRC_ATOP);
         mAppLabel.setTextColor(color);
         mDividerViews.setBackgroundColor(color);
     }
