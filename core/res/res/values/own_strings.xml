@@ -389,17 +389,7 @@
     <string name="animation_grow_shrink_right">Grow in (Right)</string>
     <string name="action_null">Blank</string>
 
-  <!-- Default fingerprint name when a new fingerprint is added -->
-    <string name="fingerprint_default_name">Fingerprint <xliff:g id="number">%d</xliff:g></string>
-
-    <!-- Floating Window -->
-    <string name="floating_window_snap_top">Snap top</string>
-    <string name="floating_window_snap_bottom">Snap bottom</string>
-    <string name="floating_window_snap_left">Snap left</string>
-    <string name="floating_window_snap_right">Snap right</string>
-    <string name="floating_window_minimize">Minimize</string>
-
-    <!-- Setting confirmation dialog strings. Shown when any UI interaction can be modified by user input -->
+   <!-- Setting confirmation dialog strings. Shown when any UI interaction can be modified by user input -->
     <string name="setting_confirmation_ask_me_later">Ask later</string>
     <string name="setting_confirmation_yes">Yes</string>
     <string name="setting_confirmation_no">No</string>
