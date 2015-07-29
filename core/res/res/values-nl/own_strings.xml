@@ -231,4 +231,10 @@
   <string name="setting_confirmation_yes">Ja</string>
   <string name="setting_confirmation_no">Nee</string>
   <string name="fingerprint_default_name">Vingerafdruk <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">toegang tot vingerafdrukservice</string>
+  <string name="permdesc_accessFingerprintService">Hiermee kan de app toegang krijgen tot de vingerafdrukservice. De app kan vingerafdrukken toevoegen, verwijderen, hernoemen en gebruiken ter authenticatie.</string>
+  <string name="permlab_resetBatteryStats">accustatistieken opnieuw instellen</string>
+  <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
+  <string name="silent_mode_priority">Prioriteit</string>
+  <string name="silent_mode_none">Geen</string>
 </resources>
