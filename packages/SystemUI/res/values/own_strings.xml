@@ -361,4 +361,8 @@
 
 	<!-- Pie Tile -->
 	<string name="quick_settings_pie">Pie</string>
+	
+	 <!-- Battery Saver Dismiss -->
+    <string name="battery_saver_dismiss_title">Dismiss</string>
+
 </resources>
