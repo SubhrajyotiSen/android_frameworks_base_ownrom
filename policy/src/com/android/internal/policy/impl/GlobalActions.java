@@ -135,12 +135,10 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private boolean mHasTelephony;
     private boolean mHasVibrator;
     private final boolean mShowSilentToggle;
-    private Profile mChosenProfile;
     private boolean showReboot;
 
     // Power menu customizations
     String mActions;
-    boolean mProfilesEnabled;
 
     /**
      * @param context everything needs a context :(
@@ -1241,8 +1239,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         ContentResolver resolver = mContext.getContentResolver();
         mActions = Settings.Secure.getStringForUser(resolver,
                 Settings.Secure.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
-        mProfilesEnabled = Settings.System.getInt(resolver,
-                Settings.System.SYSTEM_PROFILES_ENABLED, 1) != 0;
     }
 
     private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
