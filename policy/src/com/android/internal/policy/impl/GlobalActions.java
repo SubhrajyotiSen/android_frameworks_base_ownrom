@@ -135,10 +135,10 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private boolean mHasTelephony;
     private boolean mHasVibrator;
     private final boolean mShowSilentToggle;
+    private boolean showReboot;
 
     // Power menu customizations
     String mActions;
-    boolean mProfilesEnabled;
 
     /**
      * @param context everything needs a context :(
@@ -185,6 +185,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
      * @param keyguardShowing True if keyguard is showing
      */
     public void showDialog(boolean keyguardShowing, boolean isDeviceProvisioned) {
+        showDialog(keyguardShowing, isDeviceProvisioned, false);
+    }
+
+    public void showDialog(boolean keyguardShowing, boolean isDeviceProvisioned, boolean mShowReboot) {
+        showReboot = mShowReboot;
         mKeyguardShowing = keyguardShowing;
         mDeviceProvisioned = isDeviceProvisioned;
         if (mDialog != null && mUiContext == null) {
@@ -1234,8 +1239,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         ContentResolver resolver = mContext.getContentResolver();
         mActions = Settings.Secure.getStringForUser(resolver,
                 Settings.Secure.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
-        mProfilesEnabled = Settings.System.getInt(resolver,
-                Settings.System.SYSTEM_PROFILES_ENABLED, 1) != 0;
     }
 
     private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
