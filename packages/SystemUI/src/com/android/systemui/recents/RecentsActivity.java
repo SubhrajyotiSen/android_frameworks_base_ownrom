@@ -240,34 +240,41 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
         }
 
         // Update the top level view's visibilities
-        if (mConfig.launchedWithNoRecentTasks) {
-            if (mEmptyView == null) {
-                mEmptyView = mEmptyViewStub.inflate();
-            }
-            mEmptyView.setVisibility(View.VISIBLE);
-            mEmptyView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dismissRecentsToHome(true);
-                }
-            });
-            mRecentsView.setSearchBarVisibility(View.GONE);
-            findViewById(R.id.floating_action_button).setVisibility(View.GONE);
+       if (mConfig.launchedWithNoRecentTasks) {
+           if (mEmptyView == null) {
+               mEmptyView = mEmptyViewStub.inflate();
+           }
+           mEmptyView.setVisibility(View.VISIBLE);
+           mRecentsView.setSearchBarVisibility(View.GONE);
+           findViewById(R.id.floating_action_button).setVisibility(View.GONE);
         } else {
-            if (mEmptyView != null) {
-                mEmptyView.setVisibility(View.GONE);
-                mEmptyView.setOnClickListener(null);
-            }
-            if (!mConfig.searchBarEnabled) {
-                mRecentsView.setSearchBarVisibility(View.GONE);
-                findViewById(R.id.clear_recents).setVisibility(View.GONE);
-            } else {
-				findViewById(R.id.clear_recents).setVisibility(View.VISIBLE);
-                if (mRecentsView.hasValidSearchBar()) {
-                    mRecentsView.setSearchBarVisibility(View.VISIBLE);
+           if (mEmptyView != null) {
+               mEmptyView.setVisibility(View.GONE);
+           }
+           boolean showSearchBar = CMSettings.System.getInt(getContentResolver(),
+                       CMSettings.System.RECENTS_SHOW_SEARCH_BAR, 1) == 1;
+           findViewById(R.id.clear_recents).setVisibility(View.VISIBLE);
+           if (mRecentsView.hasValidSearchBar()) {
+               if (showSearchBar) {
+                   mRecentsView.setSearchBarVisibility(View.VISIBLE);
                 } else {
+                    mRecentsView.setSearchBarVisibility(View.GONE);
+                }
+       findViewById(R.id.floating_action_button).setVisibility(View.VISIBLE);
+            } 
+		else {
+                if (showSearchBar) {
                     refreshSearchWidgetView();
                 }
+            }
+
+            // Update search bar space height
+            if (showSearchBar) {
+                mConfig.searchBarSpaceHeightPx = getResources().getDimensionPixelSize(
+                    R.dimen.recents_search_bar_space_height);
+            } else {
+                mConfig.searchBarSpaceHeightPx = 0;
+>>>>>>> 181c392... SystemUI: Fix Crash On tapping Clear All Button In recents
             }
         }
 
