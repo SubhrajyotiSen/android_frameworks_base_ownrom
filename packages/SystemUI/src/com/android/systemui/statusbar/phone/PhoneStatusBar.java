@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2010 The Android Open Source Project
  *
@@ -959,6 +960,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
 		addSidebarView();
+		addAppCircleSidebar();
         
         if (mNavigationBarView == null) {
             mNavigationBarView =
