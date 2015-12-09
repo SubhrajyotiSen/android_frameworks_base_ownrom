@@ -4010,6 +4010,13 @@ public final class Settings {
         public static final String LOCKSCREEN_SHORTCUTS_LONGPRESS =
                 "lockscreen_shortcuts_longpress";
 
+ 	/**
+         * Three Finger Gesture from Oppo
+         *
+         * @hide
+         */
+        public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
+
         /**
          * Whether or not to use the app sidebar
          *
