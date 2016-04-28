@@ -214,4 +214,7 @@
   <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Wachtrij weergeven</string>
+  <!-- The text for the button in the notification window-shade that clears
+       all of the currently visible notifications. [CHAR LIMIT=10]-->
+  <string name="clear_recents">Sluit alle apps</string>
 </resources>
