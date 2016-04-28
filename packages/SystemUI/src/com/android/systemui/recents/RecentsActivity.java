@@ -239,9 +239,9 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
             }
         }
 
-       // Update the top level view's visibilities
-       if (mConfig.launchedWithNoRecentTasks) {
-           if (mEmptyView == null) {
+        // Update the top level view's visibilities
+        if (mConfig.launchedWithNoRecentTasks) {
+            if (mEmptyView == null) {
                 mEmptyView = mEmptyViewStub.inflate();
             }
             mEmptyView.setVisibility(View.VISIBLE);
@@ -252,35 +252,19 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
                 }
             });
             mRecentsView.setSearchBarVisibility(View.GONE);
-            findViewById(R.id.floating_action_button).setVisibility(View.GONE);
         } else {
             if (mEmptyView != null) {
                 mEmptyView.setVisibility(View.GONE);
                 mEmptyView.setOnClickListener(null);
             }
-            boolean showSearchBar = CMSettings.System.getInt(getContentResolver(),
-                       CMSettings.System.RECENTS_SHOW_SEARCH_BAR, 1) == 1;
-           findViewById(R.id.clear_recents).setVisibility(View.VISIBLE);
-           if (mRecentsView.hasValidSearchBar()) {
-               if (showSearchBar) {
-                   mRecentsView.setSearchBarVisibility(View.VISIBLE);
-               } else {
-                   mRecentsView.setSearchBarVisibility(View.GONE);
-               }
-      findViewById(R.id.floating_action_button).setVisibility(View.VISIBLE);
-           } 
- 		else {
-               if (showSearchBar) {
-                   refreshSearchWidgetView();
-               }
-           }
-
-            // Update search bar space height
-            if (showSearchBar) {
-                mConfig.searchBarSpaceHeightPx = getResources().getDimensionPixelSize(
-                    R.dimen.recents_search_bar_space_height);
+            if (!mConfig.searchBarEnabled) {
+                mRecentsView.setSearchBarVisibility(View.GONE);
             } else {
-                mConfig.searchBarSpaceHeightPx = 0;
+                if (mRecentsView.hasValidSearchBar()) {
+                    mRecentsView.setSearchBarVisibility(View.VISIBLE);
+                } else {
+                    refreshSearchWidgetView();
+                }
             }
         }
 
@@ -594,7 +578,6 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
 
         // Dismiss Recents to the focused Task or Home
         dismissRecentsToFocusedTaskOrHome(true);
-        mRecentsView.endFABanimation();
     }
 
     /** Called when debug mode is triggered */
@@ -644,25 +627,21 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
     public void onExitToHomeAnimationTriggered() {
         // Animate the SystemUI scrim views out
         mScrimViews.startExitRecentsAnimation();
-        mRecentsView.endFABanimation();
     }
 
     @Override
     public void onTaskViewClicked() {
-	mRecentsView.endFABanimation();
     }
 
     @Override
     public void onTaskLaunchFailed() {
         // Return to Home
         dismissRecentsToHomeRaw(true);
-        mRecentsView.endFABanimation();
     }
 
     @Override
     public void onAllTaskViewsDismissed() {
         mFinishLaunchHomeRunnable.run();
-        mRecentsView.endFABanimation();
     }
 
     @Override

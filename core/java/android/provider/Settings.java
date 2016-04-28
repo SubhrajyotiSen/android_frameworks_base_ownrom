@@ -3543,18 +3543,6 @@ public final class Settings {
                 "volume_keys_control_ring_stream";
 
 	    /**
-         * show clear all recents button
-         *  @hide
-         */
-        public static final String SHOW_CLEAR_ALL_RECENTS = "show_clear_all_recents";
-
-        /**
-         * location of the clear all rectents button
-         * @hide
-         */
-        public static final String RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
-
-	    /**
          * show the membar in recents
          *  @hide
          */
