@@ -38,6 +38,7 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.EventLog;
 import android.util.Log;
 import android.view.ViewAnimationUtils;
 import android.view.Gravity;
@@ -51,6 +52,7 @@ import android.widget.TextView;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
+import com.android.systemui.EventLogTags;
 import com.android.systemui.recents.Constants;
 import com.android.systemui.recents.RecentsAppWidgetHostView;
 import com.android.systemui.recents.RecentsConfiguration;
@@ -305,6 +307,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
             stackView.startEnterRecentsAnimation(ctx);
         }
         ctx.postAnimationTrigger.decrement();
+        EventLog.writeEvent(EventLogTags.SYSUI_RECENTS_EVENT, 1 /* opened */);
     }
 
     /** Requests all task stacks to start their exit-recents animation */
@@ -369,7 +372,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
                     Settings.System.SYSTEMUI_RECENTS_MEM_DISPLAY, 1) == 1;
 
         // Get the search bar bounds and measure the search bar layout
-        if (mSearchBar != null) {
+        if (mSearchBar != null && mConfig.searchBarEnabled) {
             mConfig.getSearchBarBounds(width, height, mConfig.systemInsets.top, searchBarSpaceBounds);
             mSearchBar.measure(
                     MeasureSpec.makeMeasureSpec(searchBarSpaceBounds.width(), MeasureSpec.EXACTLY),
@@ -392,7 +395,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         showMemDisplay();
 
         boolean showClearAllRecents = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SHOW_CLEAR_ALL_RECENTS, 0, UserHandle.USER_CURRENT) != 0;
+                Settings.System.SHOW_CLEAR_ALL_RECENTS, 1, UserHandle.USER_CURRENT) != 0;
 
         Rect taskStackBounds = new Rect();
         mConfig.getAvailableTaskStackBounds(width, height, mConfig.systemInsets.top,
@@ -491,16 +494,16 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
     @Override
     protected void onAttachedToWindow () {
         super.onAttachedToWindow();
-        mMemText = (TextView) ((View)getParent()).findViewById(R.id.recents_memory_text);
-        mMemBar = (ProgressBar) ((View)getParent()).findViewById(R.id.recents_memory_bar);
-        updateMemoryStatus();
         mFloatingButton = ((View)getParent()).findViewById(R.id.floating_action_button);
         mClearRecents = ((View)getParent()).findViewById(R.id.clear_recents);
         mClearRecents.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dismissAllTasksAnimated();
+        updateMemoryStatus();
             }
         });
+        mMemText = (TextView) ((View)getParent()).findViewById(R.id.recents_memory_text);
+        mMemBar = (ProgressBar) ((View)getParent()).findViewById(R.id.recents_memory_bar);
     }
 
     private boolean showMemDisplay() {
@@ -551,7 +554,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         // Get the search bar bounds so that we lay it out
-        if (mSearchBar != null) {
+        if (mSearchBar != null && mConfig.searchBarEnabled) {
             Rect searchBarSpaceBounds = new Rect();
             mConfig.getSearchBarBounds(getMeasuredWidth(), getMeasuredHeight(),
                     mConfig.systemInsets.top, searchBarSpaceBounds);
@@ -811,6 +814,8 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
                 launchRunnable.run();
             }
         }
+        
+        EventLog.writeEvent(EventLogTags.SYSUI_RECENTS_EVENT, 3 /* chose task */);
     }
 
     @Override
@@ -854,6 +859,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
 
         // Keep track of all-deletions
         MetricsLogger.count(getContext(), "overview_task_all_dismissed", 1);
+        EventLog.writeEvent(EventLogTags.SYSUI_RECENTS_EVENT, 4 /* closed all */);
     }
 
     /** Final callback after Recents is finally hidden. */
@@ -865,6 +871,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
             TaskStackView stackView = stackViews.get(i);
             stackView.onRecentsHidden();
         }
+        EventLog.writeEvent(EventLogTags.SYSUI_RECENTS_EVENT, 2 /* closed */);
     }
 
     @Override

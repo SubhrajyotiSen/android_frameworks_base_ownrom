@@ -3542,7 +3542,7 @@ public final class Settings {
         public static final String VOLUME_KEYS_CONTROL_RING_STREAM =
                 "volume_keys_control_ring_stream";
 
-	    /**
+        /**
          * show the membar in recents
          *  @hide
          */
