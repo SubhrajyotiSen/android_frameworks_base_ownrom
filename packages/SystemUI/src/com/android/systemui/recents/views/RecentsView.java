@@ -126,7 +126,6 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         mInflater = LayoutInflater.from(context);
         mLayoutAlgorithm = new RecentsViewLayoutAlgorithm(mConfig);
         mAm = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
-        mTotalMem = getTotalMemory();
     }
 
     /** Sets the callbacks */
@@ -210,17 +209,6 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
             }
         }
         return returnTask;
-    }
-
-    public void dismissAllTasksAnimated() {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View child = getChildAt(i);
-            if (child != mSearchBar) {
-                TaskStackView stackView = (TaskStackView) child;
-                stackView.dismissAllTasks();
-            }
-        }
     }
 
     /** Launches the focused task from the first stack if possible */
@@ -529,23 +517,17 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         MemoryInfo memInfo = new MemoryInfo();
         mAm.getMemoryInfo(memInfo);
             int available = (int)(memInfo.availMem / 1048576L);
+            int max = (int)(getTotalMemory() / 1048576L);
             mMemText.setText("Free RAM: " + String.valueOf(available) + "MB");
-            mMemBar.setMax(mTotalMem);
+            mMemBar.setMax(max);
             mMemBar.setProgress(available);
     }
 
-    public int getTotalMemory() {
-        int memory = 0;
-        try {
-            final FileReader localFileReader = new FileReader("/proc/meminfo");
-            final BufferedReader localBufferedReader = new BufferedReader(localFileReader, 8192);
-            String str2 = localBufferedReader.readLine(); // meminfo
-            String[] arrayOfString = str2.split("\\s+");
-            memory = Integer.valueOf(arrayOfString[1]).intValue() * 1024;
-            localBufferedReader.close();
-        } catch (IOException e) {
-        }
-        return memory / 1048576;
+    public long getTotalMemory() {
+        MemoryInfo memInfo = new MemoryInfo();
+        mAm.getMemoryInfo(memInfo);
+        long totalMem = memInfo.totalMem;
+        return totalMem;
     }
     
     /**
@@ -921,4 +903,15 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
             stackView.onPackagesChanged(monitor, packageName, userId);
         }
     }
+    
+    public void dismissAllTasksAnimated() {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            if (child != mSearchBar) {
+                    TaskStackView stackView = (TaskStackView) child;
+                    stackView.dismissAllTasks();
+			}
+		}
+	}
 }
