@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2012-2015 The CyanogenMod Project
+     Copyright (C) 2015-2016 OwnROM
      Copyright (c) 2013, The Linux Foundation. All rights reserved.
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -136,4 +136,8 @@
     <!-- Uicc hotswapped event configuration needed notification -->
     <java-symbol type="string" name="uicc_hot_swapped_event_title" />
     <java-symbol type="string" name="uicc_hot_swapped_event_text" />
+    
+  <!-- Hardware keys on/off option -->
+  <java-symbol type="bool" name="config_hwKeysPref" />
+
 </resources>
