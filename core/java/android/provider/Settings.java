@@ -3756,6 +3756,18 @@ public final class Settings {
         public static final String DIM_NAV_BUTTONS_TOUCH_ANYWHERE = "dim_nav_buttons_touch_anywhere";
 
         /**
+         * Statusbar OwnROM logo
+         * @hide
+         */
+        public static final String STATUS_BAR_OWN_LOGO = "status_bar_own_logo";
+
+ 	    /**
+         * Statusbar RR logo color setting
+         * @hide
+         */
+		public static final String STATUS_BAR_OWN_LOGO_COLOR = "status_bar_own_logo_color";
+ 
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *

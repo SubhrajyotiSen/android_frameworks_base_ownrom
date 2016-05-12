@@ -374,6 +374,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     boolean mExpandedVisible;
 
+    // OwnROM logo
+    private boolean mOWNlogo;
+    private ImageView ownLogo;
+    private int mOWNLogoColor;
+
     private int mNavigationBarWindowState = WINDOW_STATE_SHOWING;
 
     private int mStatusBarHeaderHeight;
@@ -467,6 +472,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.BATTERY_SAVER_MODE_COLOR),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_OWN_LOGO),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_OWN_LOGO_COLOR),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -505,7 +516,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mBrightnessControl = CMSettings.System.getIntForUser(
                     resolver, CMSettings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0,
                     UserHandle.USER_CURRENT) == 1;
-
+            mOWNlogo = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_OWN_LOGO, 0, mCurrentUserId) == 1;
+            mOWNLogoColor = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_OWN_LOGO_COLOR, 0xFFFFFFFF, mCurrentUserId);
+            showOWNLogo(mOWNlogo, mOWNLogoColor);
+            if (oldWeatherState != mWeatherTempState) {
+                updateTempView();
+		}
             if (mNavigationBarView != null) {
                 boolean navLeftInLandscape = CMSettings.System.getIntForUser(resolver,
                         CMSettings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0, UserHandle.USER_CURRENT) == 1;
@@ -3611,6 +3629,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
     };
+
++    public void showOWNLogo(boolean show , int color) {
+        if (mStatusBarView == null) return;
+        ContentResolver resolver = mContext.getContentResolver();
+        ownLogo = (ImageView) mStatusBarView.findViewById(R.id.own_logo);
+        ownLogo.setColorFilter(color, Mode.SRC_IN);
+        if (ownLogo != null) {
+            ownLogo.setVisibility(show ? (mOWNlogo ? View.VISIBLE : View.GONE) : View.GONE);
+        }
+    }
 
     private void resetUserExpandedStates() {
         ArrayList<Entry> activeNotifications = mNotificationData.getActiveNotifications();
