@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.phone;
 
 
+import android.graphics.PorterDuff.Mode;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.NonNull;
@@ -521,9 +522,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mOWNLogoColor = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_OWN_LOGO_COLOR, 0xFFFFFFFF, mCurrentUserId);
             showOWNLogo(mOWNlogo, mOWNLogoColor);
-            if (oldWeatherState != mWeatherTempState) {
-                updateTempView();
-		}
             if (mNavigationBarView != null) {
                 boolean navLeftInLandscape = CMSettings.System.getIntForUser(resolver,
                         CMSettings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0, UserHandle.USER_CURRENT) == 1;
@@ -3630,7 +3628,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     };
 
-+    public void showOWNLogo(boolean show , int color) {
+    public void showOWNLogo(boolean show , int color) {
         if (mStatusBarView == null) return;
         ContentResolver resolver = mContext.getContentResolver();
         ownLogo = (ImageView) mStatusBarView.findViewById(R.id.own_logo);

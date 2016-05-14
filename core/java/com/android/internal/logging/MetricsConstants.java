@@ -268,4 +268,5 @@ public interface MetricsConstants {
 
     //aliases
     public static final int DEVICEINFO_STORAGE = DEVICEINFO_MEMORY;
+    public static final int OWN = 239;
 }
