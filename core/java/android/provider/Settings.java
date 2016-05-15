@@ -3774,10 +3774,9 @@ public final class Settings {
         public static final String STATUS_BAR_CUSTOM_HEADER_PROVIDER = "status_bar_custom_header_provider";
 
          /**
-         * Whether to use default custom header, modern or poly hd
+         * Whether to use default custom header or poly hd
          * 0 = default
-         * 1 = modern
-         * 2 = poly hd
+         * 1 = poly hd
          * @hide
          */
         public static final String STATUS_BAR_CUSTOM_HEADER_DEFAULT = "status_bar_custom_header_default";
