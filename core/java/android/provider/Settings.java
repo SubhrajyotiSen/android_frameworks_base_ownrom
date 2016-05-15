@@ -3632,12 +3632,6 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_CLOCK_FONT_SIZE = "statusbar_clock_font_size";
-
-        /**
-         * Display second in the Clock
-         * @hide
-         */
-        public static final String CLOCK_USE_SECOND = "clock_use_second";
         
         /**
          * @hide

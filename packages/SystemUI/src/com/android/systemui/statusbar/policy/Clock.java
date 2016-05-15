@@ -133,9 +133,6 @@ public class Clock extends TextView implements DemoMode {
         }
     }
 
-    private final Handler handler = new Handler();
-    TimerTask second;
-
     public Clock(Context context) {
         this(context, null);
     }
@@ -239,13 +236,6 @@ public class Clock extends TextView implements DemoMode {
 
         SimpleDateFormat sdf;
         String format = is24 ? d.timeFormat_Hm : d.timeFormat_hm;
-
-        // replace seconds directly in format, not in result
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.CLOCK_USE_SECOND, 0) == 1) {
-            String temp = format;
-            format = temp.replaceFirst("mm","mm:ss");
-        }
 
         if (!format.equals(mClockFormatString)) {
             /*
@@ -363,24 +353,6 @@ public class Clock extends TextView implements DemoMode {
         mClockFontSize = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUSBAR_CLOCK_FONT_SIZE, 14,
                 UserHandle.USER_CURRENT);
-
-        second = new TimerTask()
-        {
-            @Override
-            public void run()
-             {
-                Runnable updater = new Runnable()
-                  {
-                   public void run()
-                   {
-                       updateClock();
-                   }
-                  };
-                handler.post(updater);
-             }
-        };
-        Timer timer = new Timer();
-        timer.schedule(second, 0, 1001);
 
         getFontStyle(mClockFontStyle);
         setTextSize(mClockFontSize);
