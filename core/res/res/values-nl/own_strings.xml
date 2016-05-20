@@ -193,4 +193,19 @@
   <string name="reboot_systemui">Herstart SystemUI</string>
   <!-- Slimseekbar -->
   <string name="default_string">Standaard</string>
+  <!-- AOKP custom system animations -->
+  <string name="animation_fade">Vervaag</string>
+  <string name="animation_slide_right">Schuif rechts in</string>
+  <string name="animation_slide_left">Schuif links in</string>
+  <string name="animation_slide_right_no_fade">Schuif rechts in (Geen vervaging)</string>
+  <string name="animation_slide_left_no_fade">Schuif links in (Geen vervaging)</string>
+  <string name="animation_slide_up">Schuif van onder in</string>
+  <string name="animation_slide_down">Schuif van boven in</string>
+  <string name="animation_default">Standaard</string>
+  <string name="animation_translucent">Doorzichtig</string>
+  <string name="animation_grow_shrink">Groei van boven</string>
+  <string name="animation_grow_shrink_center">Groei vanuit midden</string>
+  <string name="animation_grow_shrink_bottom">Groei van onder</string>
+  <string name="animation_grow_shrink_left">Groei van links</string>
+  <string name="animation_grow_shrink_right">Groei van rechts</string>
 </resources>
