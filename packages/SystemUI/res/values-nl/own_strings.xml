@@ -217,4 +217,6 @@
   <!-- The text for the button in the notification window-shade that clears
        all of the currently visible notifications. [CHAR LIMIT=10]-->
   <string name="clear_recents">Sluit alle apps</string>
+  <!-- GA Gesture -->
+  <string name="gestures_message">Teken hier uw gebaar</string>
 </resources>
