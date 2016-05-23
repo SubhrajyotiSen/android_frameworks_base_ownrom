@@ -11959,7 +11959,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 lastRi = curRi;
                 showBootMessage(ai.applicationInfo, Integer.MIN_VALUE + 2, Integer.MIN_VALUE + 2,
                         false);
-                showBootMessage(mContext.getString(R.string.android_preparing_apk, label), false);
             }
             Slog.i(TAG, "Pre-boot of " + intent.getComponent().toShortString()
                     + " for user " + users[curUser]);
