@@ -460,6 +460,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         SettingsObserver(Handler handler) {
             super(handler);
         }
+    
 
         @Override
         protected void observe() {
@@ -549,6 +550,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             // This method reads CMSettings.Secure.RECENTS_LONG_PRESS_ACTIVITY
             updateCustomRecentsLongPressHandler(false);
 
+	    
+	    
             int sidebarPosition = Settings.System.getInt(
                     resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT);
             if (sidebarPosition != mSidebarPosition) {
@@ -557,7 +560,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 addSidebarView();
             }
         }
-
+    }
+    
     public void setStatusBarViewVisibility(boolean visible) {
         mStatusBarView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
