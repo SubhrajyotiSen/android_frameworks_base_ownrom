@@ -460,6 +460,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         SettingsObserver(Handler handler) {
             super(handler);
         }
+    }
 
         @Override
         protected void observe() {
