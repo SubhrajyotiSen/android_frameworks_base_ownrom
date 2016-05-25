@@ -141,8 +141,8 @@ import com.android.systemui.own.StatusBarHeaderMachine;
 import com.android.systemui.qs.QSDragPanel;
 import com.android.systemui.recents.ScreenPinningRequest;
 import com.android.systemui.statusbar.ActivatableNotificationView;
-import com.android.systemui.statusbar.BackDropView;
 import com.android.systemui.statusbar.AppSidebar;
+import com.android.systemui.statusbar.BackDropView;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.DismissView;
@@ -460,7 +460,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         SettingsObserver(Handler handler) {
             super(handler);
         }
-    }
 
         @Override
         protected void observe() {
@@ -549,15 +548,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             // This method reads CMSettings.Secure.RECENTS_LONG_PRESS_ACTIVITY
             updateCustomRecentsLongPressHandler(false);
-
-            int sidebarPosition = Settings.System.getInt(
-                    resolver, Settings.System.APP_SIDEBAR_POSITION, AppSidebar.SIDEBAR_POSITION_LEFT);
-            if (sidebarPosition != mSidebarPosition) {
-                mSidebarPosition = sidebarPosition;
-                removeSidebarView();
-                addSidebarView();
-            }
         }
+    }
 
     public void setStatusBarViewVisibility(boolean visible) {
         mStatusBarView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
@@ -955,8 +947,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNotificationPanelDebugText.setVisibility(View.VISIBLE);
         }
 
-        addSidebarView();
-
+		addSidebarView();
+        
         if (mNavigationBarView == null) {
             mNavigationBarView =
                 (NavigationBarView) View.inflate(context, R.layout.navigation_bar, null);
@@ -3773,6 +3765,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
         if (mDockBatteryController != null) {
             mDockBatteryController.setUserId(mCurrentUserId);
+        }
+    }
+
+    private void updateSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+        int sidebarPosition = Settings.System.getInt(resolver,
+                Settings.System.APP_SIDEBAR_POSITION, 
+                AppSidebar.SIDEBAR_POSITION_LEFT);
+        if (sidebarPosition != mSidebarPosition) {
+            mSidebarPosition = sidebarPosition;
+            mWindowManager.updateViewLayout(mAppSidebar, getAppSidebarLayoutParams(sidebarPosition));
         }
     }
 
