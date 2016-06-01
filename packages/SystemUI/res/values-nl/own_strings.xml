@@ -239,4 +239,7 @@
   <string name="tasklist_killall">Sluit alles</string>
   <string name="tasklist_memory_usage">"Vrij/Totaal geheugen: <xliff:g id="number">%s</xliff:g> / <xliff:g id="name">%s</xliff:g>"</string>
   <string name="message_keep_one_launcher">Tenminste 1 thuis activiteit dient open te zijn!</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>
