@@ -2263,18 +2263,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 updateWakeGestureListenerLp();
             }
 
-<<<<<<< HEAD
-=======
-            boolean devForceNavbar = CMSettings.Global.getIntForUser(resolver,
-                    CMSettings.Global.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
-            if (devForceNavbar != mDevForceNavbar) {
-                mDevForceNavbar = devForceNavbar;
-                if (mCMHardware.isSupported(CMHardwareManager.FEATURE_KEY_DISABLE)) {
-                    mCMHardware.set(CMHardwareManager.FEATURE_KEY_DISABLE, mDevForceNavbar);
-                }
-            }
-
->>>>>>> 44e91e0ed2b3056e30ccfbb009be5f19495061ce
             mNavigationBarLeftInLandscape = CMSettings.System.getIntForUser(resolver,
                     CMSettings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0, UserHandle.USER_CURRENT) == 1;
 
@@ -3359,21 +3347,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // timeout.
         if (keyCode == KeyEvent.KEYCODE_HOME) {
 
-<<<<<<< HEAD
             // Disable home key if hw keys is set to off
             if (scanCode != 0 && !hasHwKeysEnabled()) {
                 Log.i(TAG, "Ignoring Home Key: we have hw keys disabled");
                 return 0;
             }
 
-=======
             if (mTopFullscreenOpaqueWindowState != null &&
                     (mTopFullscreenOpaqueWindowState.getAttrs().privateFlags
                             & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS) != 0
                     && mScreenOnFully) {
                 return 0;
             }
->>>>>>> 44e91e0ed2b3056e30ccfbb009be5f19495061ce
+
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
             if (!down) {
@@ -3561,17 +3547,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return 0;
         } else if (keyCode == KeyEvent.KEYCODE_APP_SWITCH) {
-<<<<<<< HEAD
-
             // Disable app switch key if hw keys is set to off
             if (scanCode != 0 && !hasHwKeysEnabled()) {
                 Log.i(TAG, "Ignoring App Switch Key: we have hw keys disabled");
-=======
-            if (mTopFullscreenOpaqueWindowState != null &&
-                    (mTopFullscreenOpaqueWindowState.getAttrs().privateFlags
-                            & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS) != 0
-                    && mScreenOnFully) {
->>>>>>> 44e91e0ed2b3056e30ccfbb009be5f19495061ce
                 return 0;
             }
 
@@ -3740,6 +3718,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
+            if (mTopFullscreenOpaqueWindowState != null &&
+                    (mTopFullscreenOpaqueWindowState.getAttrs().privateFlags
+                            & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS) != 0
+                    && mScreenOnFully) {
+                return 0;
+            }
+            
         // Shortcuts are invoked through Search+key, so intercept those here
         // Any printing key that is chorded with Search should be consumed
         // even if no shortcut was invoked.  This prevents text from being
