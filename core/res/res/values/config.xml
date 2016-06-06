@@ -2577,4 +2577,7 @@
     <!-- Sets whether IME switcher on statusbar should be shown or not. -->
 	<bool name="config_show_IMESwitcher">true</bool>
 
+    <!-- Whether to persist the notification for when a usb drive device is plugged in -->
+    <bool name="config_persistUsbDriveNotification">false</bool>
+
 </resources>
