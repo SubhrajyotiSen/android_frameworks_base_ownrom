@@ -15,6 +15,6 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	
-    <string name="keyguard_wallpaper_instructions">Set lock screen wallpaper</string>
+    <string name="keyguard_wallpaper_instructions">Stel vergrendelings scherm achtergrond in</string>
 
 </resources>
