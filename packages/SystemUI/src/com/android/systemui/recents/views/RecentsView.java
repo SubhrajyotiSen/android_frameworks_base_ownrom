@@ -181,6 +181,7 @@ public class RecentsView extends FrameLayout {
                 @Override
                 public void onClick(View v) {
                     EventBus.getDefault().send(new DismissAllTaskViewsEvent());
+					updateMemoryStatus();
                 }
             });
             addView(mStackActionButton);
