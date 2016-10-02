@@ -3945,7 +3945,19 @@ public final class Settings {
          * @hide
          */
         public static final String RECENTS_USE_OMNISWITCH = "recents_use_omniswitch";
-        
+
+		/**
+         * show clear all recents button
+         *  @hide
+         */
+        public static final String SHOW_CLEAR_ALL_RECENTS = "show_clear_all_recents";
+
+        /**
+         * location of the clear all rectents button
+         * @hide
+         */
+        public static final String  RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
+                
         /**
          * Whether to show Brightness Icon On Brightness Slider
          * @hide
@@ -4039,7 +4051,7 @@ public final class Settings {
             ACCELEROMETER_ROTATION
         };
 
-        /**
+		/**
          * These are all public system settings
          *
          * @hide
