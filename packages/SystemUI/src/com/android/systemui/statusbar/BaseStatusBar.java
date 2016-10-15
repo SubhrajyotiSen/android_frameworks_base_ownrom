@@ -280,6 +280,8 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     private Set<String> mNonBlockablePkgs;
 
+    protected boolean mScreenPinningEnabled;
+
     @Override  // NotificationData.Environment
     public boolean isDeviceProvisioned() {
         return mDeviceProvisioned;
@@ -1334,7 +1336,11 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     @Override
     public void screenPinningStateChanged(boolean enabled) {
-        Log.d(TAG, "StatusBar API screenPinningStateChanged = " + enabled);
+        if (mScreenPinningEnabled != enabled) {
+            mScreenPinningEnabled = enabled;
+        }
+        if (DEBUG)
+            Log.d(TAG, "StatusBar API screenPinningStateChanged = " + enabled);
     }
 
     protected H createHandler() {
@@ -1385,20 +1391,37 @@ public abstract class BaseStatusBar extends SystemUI implements
     /** Proxy for RecentsComponent */
 
     protected void showRecents(boolean triggeredFromAltTab, boolean fromHome) {
-        if (mRecents != null) {
-            sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
-            mRecents.showRecents(triggeredFromAltTab, fromHome);
+        if (isOmniSwitchEnabled()) {
+            if (!mScreenPinningEnabled) {
+                Intent showIntent = new Intent(OmniSwitchConstants.ACTION_SHOW_OVERLAY);
+                mContext.sendBroadcastAsUser(showIntent, UserHandle.CURRENT);
+            }
+        } else {
+            if (mRecents != null) {
+                sendCloseSystemWindows(SYSTEM_DIALOG_REASON_RECENT_APPS);
+                mRecents.showRecents(triggeredFromAltTab, fromHome);
+            }
         }
     }
 
     protected void hideRecents(boolean triggeredFromAltTab, boolean triggeredFromHomeKey) {
-        if (mRecents != null) {
+        if (isOmniSwitchEnabled()) {
+            if (!mScreenPinningEnabled) {
+                Intent showIntent = new Intent(OmniSwitchConstants.ACTION_HIDE_OVERLAY);
+                mContext.sendBroadcastAsUser(showIntent, UserHandle.CURRENT);
+            }
+        } else if (mRecents != null) {
             mRecents.hideRecents(triggeredFromAltTab, triggeredFromHomeKey);
         }
     }
 
     protected void toggleRecents() {
-        if (mRecents != null) {
+        if (isOmniSwitchEnabled()) {
+            if (!mScreenPinningEnabled) {
+                Intent showIntent = new Intent(OmniSwitchConstants.ACTION_TOGGLE_OVERLAY);
+                mContext.sendBroadcastAsUser(showIntent, UserHandle.CURRENT);
+            }
+        } else if (mRecents != null) {
             mRecents.toggleRecents(mDisplay);
         }
     }
