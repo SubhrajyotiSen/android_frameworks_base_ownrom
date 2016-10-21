@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.android.internal.util.rr;
+package com.android.internal.util.own;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
