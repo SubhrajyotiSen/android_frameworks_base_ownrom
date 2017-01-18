@@ -226,10 +226,7 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         SystemServicesProxy ssp = Recents.getSystemServices();
         if (ssp.isRecentsActivityVisible()) {
             // If we have a focused Task, launch that Task now
-            if (mRecentsView.launchFocusedTask(logCategory)) {
-                mRecentsView.endFABanimation();
-                return true;
-            }
+            if (mRecentsView.launchFocusedTask(logCategory));
         }
         return false;
     }
@@ -241,10 +238,7 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         SystemServicesProxy ssp = Recents.getSystemServices();
         if (ssp.isRecentsActivityVisible()) {
             // If we have a focused Task, launch that Task now
-            if (mRecentsView.launchPreviousTask()) {
-                mRecentsView.endFABanimation();
-                return true;
-            }
+            if (mRecentsView.launchPreviousTask());
             // If none of the other cases apply, then just go Home
             dismissRecentsToHome(true /* animateTaskViews */);
         }
@@ -258,10 +252,7 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         SystemServicesProxy ssp = Recents.getSystemServices();
         if (ssp.isRecentsActivityVisible()) {
             // If we have a focused Task, launch that Task now
-            if (mRecentsView.launchFocusedTask(0 /* logCategory */)) {
-                mRecentsView.endFABanimation();
-                return true;
-            }
+            if (mRecentsView.launchFocusedTask(0 /* logCategory */));
             // If none of the other cases apply, then just go Home
             dismissRecentsToHome(true /* animateTaskViews */);
             return true;
@@ -287,7 +278,6 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
                 new DismissRecentsToHomeAnimationStarted(animateTaskViews);
         dismissEvent.addPostAnimationCallback(new LaunchHomeRunnable(mHomeIntent,
                 overrideAnimation));
-        mRecentsView.endFABanimation();
         Recents.getSystemServices().sendCloseSystemWindows(
                 BaseStatusBar.SYSTEM_DIALOG_REASON_HOME_KEY);
         EventBus.getDefault().send(dismissEvent);
@@ -423,8 +413,6 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         boolean animateNavBarScrim = !launchState.launchedViaDockGesture;
         mScrimViews.updateNavBarScrim(animateNavBarScrim, stack.getTaskCount() > 0, null);
 
-        mRecentsView.startFABanimation();
-
         // If this is a new instance relaunched by AM, without going through the normal mechanisms,
         // then we have to manually trigger the enter animation state
         boolean wasLaunchedByAm = !launchState.launchedFromHome &&
@@ -461,12 +449,6 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
 
         boolean showClearAllRecents = Settings.System.getIntForUser(getContentResolver(),
                 Settings.System.SHOW_CLEAR_ALL_RECENTS, 0, UserHandle.USER_CURRENT) != 0;
-		
-		if(showClearAllRecents) {
-		findViewById(R.id.floating_action_button).setVisibility(View.VISIBLE);
-		} else {
-		findViewById(R.id.floating_action_button).setVisibility(View.GONE);
-		}
         // After we have resumed, set the visible state until the next onStop() call
         mIsVisible = true;
     }

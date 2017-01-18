@@ -19,7 +19,6 @@ package com.android.systemui.recents.views;
 import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.ActivityOptions.OnAnimationStartedListener;
 import android.content.Context;
@@ -35,10 +34,11 @@ import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.UserHandle;
 import android.util.ArraySet;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.AppTransitionAnimationSpec;
+import android.view.Gravity;
 import android.view.IAppTransitionAnimationSpecsFuture;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -48,9 +48,9 @@ import android.view.ViewOutlineProvider;
 import android.view.ViewPropertyAnimator;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ImageButton;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.MetricsProto.MetricsEvent;
@@ -140,16 +140,10 @@ public class RecentsView extends FrameLayout {
     private ActivityManager mAm;
     private int mTotalMem;
 
-<<<<<<< HEAD
-=======
-    TextClock mClock;
-    TextView mDate;
-
 	View mFloatingButton;
 	View mClearRecents;
 	private int clearRecentsLocation;
 
->>>>>>> 8052535... Recents Clear All Button Tweaks and Add FAB to Recents Panel
     public RecentsView(Context context) {
         this(context, null);
     }
@@ -244,8 +238,14 @@ public class RecentsView extends FrameLayout {
         // Update the top level view's visibilities
         if (stack.getTaskCount() > 0) {
             hideEmptyView();
+			if (mFloatingButton != null) {
+			mFloatingButton.setVisibility(View.VISIBLE);
+			}
         } else {
             showEmptyView(R.string.recents_empty_message);
+			if (mFloatingButton != null) {
+			mFloatingButton.setVisibility(View.GONE);
+			}
         }
     }
 
@@ -326,12 +326,6 @@ public class RecentsView extends FrameLayout {
      */
     public void showEmptyView(int msgResId) {
         mTaskStackView.setVisibility(View.INVISIBLE);
-		if (mFloatingButton != null) {
-		mFloatingButton.setVisibility(View.GONE);
-		}
-	    if (mClearRecents != null) {
-		mClearRecents.setVisibility(View.GONE);
-		}
         mEmptyView.setText(msgResId);
         mEmptyView.setVisibility(View.VISIBLE);
         mEmptyView.bringToFront();
@@ -350,37 +344,15 @@ public class RecentsView extends FrameLayout {
      * Shows the task stack and hides the empty view.
      */
     public void hideEmptyView() {
+        boolean showClearAllRecents = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SHOW_CLEAR_ALL_RECENTS, 0, UserHandle.USER_CURRENT) != 0;
         mEmptyView.setVisibility(View.INVISIBLE);
         mTaskStackView.setVisibility(View.VISIBLE);
-        mTaskStackView.bringToFront();
+		mTaskStackView.bringToFront();
         if (RecentsDebugFlags.Static.EnableStackActionButton) {
             mStackActionButton.bringToFront();
         }
         setOnClickListener(null);
-    }
-
-    public void startFABanimation() {
-        RecentsConfiguration config = Recents.getConfiguration();
-        // Animate the action button in
-        mFloatingButton = ((View)getParent()).findViewById(R.id.floating_action_button);
-        mFloatingButton.animate().alpha(1f)
-                .setStartDelay(config.fabEnterAnimDelay)
-                .setDuration(config.fabEnterAnimDuration)
-                .setInterpolator(Interpolators.ALPHA_IN)
-                .withLayer()
-                .start();
-    }
-
-    public void endFABanimation() {
-        RecentsConfiguration config = Recents.getConfiguration();
-        // Animate the action button away
-        mFloatingButton = ((View)getParent()).findViewById(R.id.floating_action_button);
-        mFloatingButton.animate().alpha(0f)
-                .setStartDelay(0)
-                .setDuration(config.fabExitAnimDuration)
-                .setInterpolator(Interpolators.ALPHA_OUT)
-                .withLayer()
-                .start();
     }
 
     @Override
@@ -392,21 +364,15 @@ public class RecentsView extends FrameLayout {
                 Settings.System.SHOW_CLEAR_ALL_RECENTS, 0, UserHandle.USER_CURRENT) != 0;
 		mMemText = (TextView) ((View)getParent()).findViewById(R.id.recents_memory_text);
         mMemBar = (ProgressBar) ((View)getParent()).findViewById(R.id.recents_memory_bar);
-<<<<<<< HEAD
-=======
-        mClock = (TextClock) ((View)getParent()).findViewById(R.id.recents_clock);
-        mDate = (TextView) ((View)getParent()).findViewById(R.id.recents_date);
-        mClearRecents = ((View)getParent()).findViewById(R.id.clear_recents);
         mFloatingButton = ((View)getParent()).findViewById(R.id.floating_action_button);
-			mClearRecents.setVisibility(View.VISIBLE);
-			mClearRecents.setOnClickListener(new View.OnClickListener() {
+        mClearRecents = ((View)getParent()).findViewById(R.id.clear_recents);
+		mClearRecents.setVisibility(View.VISIBLE);
+		mClearRecents.setOnClickListener(new View.OnClickListener() {
           	public void onClick(View v) {
                 	EventBus.getDefault().send(new DismissAllTaskViewsEvent());
                 	updateMemoryStatus();
             		}
         	});
-        updateTimeVisibility();
->>>>>>> 8052535... Recents Clear All Button Tweaks and Add FAB to Recents Panel
     }
 
     @Override
@@ -489,7 +455,6 @@ public class RecentsView extends FrameLayout {
                     break;
             }
             mFloatingButton.setLayoutParams(params);
-			mFloatingButton.setVisibility(View.VISIBLE);
         } else {
             mFloatingButton.setVisibility(View.GONE);
         }
@@ -837,6 +802,7 @@ public class RecentsView extends FrameLayout {
 		if (showClearAllRecents) {
             return;
 		}
+
         final ReferenceCountedTrigger postAnimationTrigger = new ReferenceCountedTrigger();
             mStackActionButton.setVisibility(View.VISIBLE);
             mStackActionButton.setAlpha(0f);
