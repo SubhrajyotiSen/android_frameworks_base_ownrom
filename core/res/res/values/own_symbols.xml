@@ -17,6 +17,9 @@
      limitations under the License.
 -->
 <resources>
+
+    <!-- Whether device has dash charging support -->
+    <java-symbol type="bool" name="config_hasDashCharger" />
 	
     <!-- PlatLogo -->
     <java-symbol type="drawable" name="platlogo_own" />
