@@ -479,4 +479,26 @@ public abstract class Ticker {
             mTextSwitcher.setTextColor(mTickerTextColor);
         }
     }
+
+    public void setDefaultColor(int color) {
+        mDefaultColor = color;
+
+        // Update text color
+        setTextSwitcherColor();
+        // Update currently displayed icon
+        ImageView currentIcon = (ImageView) mIconSwitcher.getCurrentView();
+        if (currentIcon != null) {
+            final ColorStateList tickerIconColor =
+                    TickerColorHelper.getTickerIconColorList(mContext, mDefaultColor);
+            currentIcon.setImageTintList(tickerIconColor);
+        }
+    }
+
+    private void setTextSwitcherColor() {
+        if (mTickerTextColor == 0xffffffff) {
+            mTextSwitcher.setTextColor(mDefaultColor);
+        } else {
+            mTextSwitcher.setTextColor(mTickerTextColor);
+        }
+    }
 }
