@@ -296,4 +296,5 @@
 
     <!-- When true,show the AutoBrightness checkbox -->
     <bool name="config_show_auto_brightness">false</bool>
+
 </resources>
