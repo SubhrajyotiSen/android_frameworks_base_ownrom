@@ -464,29 +464,7 @@ public abstract class Ticker {
 
         mTickerTextColor = Settings.System.getInt(resolver,
                 Settings.System.STATUS_BAR_TICKER_TEXT_COLOR,
-                0xffffab00);
-    }
-
-    public void setDefaultColor(int color) {
-        mDefaultColor = color;
-
-        // Update text color
-        setTextSwitcherColor();
-        // Update currently displayed icon
-        ImageView currentIcon = (ImageView) mIconSwitcher.getCurrentView();
-        if (currentIcon != null) {
-            final ColorStateList tickerIconColor =
-                    TickerColorHelper.getTickerIconColorList(mContext, mDefaultColor);
-            currentIcon.setImageTintList(tickerIconColor);
-        }
-    }
-
-    private void setTextSwitcherColor() {
-        if (mTickerTextColor == 0xffffffff) {
-            mTextSwitcher.setTextColor(mDefaultColor);
-        } else {
-            mTextSwitcher.setTextColor(mTickerTextColor);
-        }
+                0xffffffff);
     }
 
     public void setDefaultColor(int color) {
