@@ -58,9 +58,6 @@ final class NetworkLogger {
             if (!mIsLoggingEnabled.get()) {
                 return;
             }
-            DnsEvent dnsEvent = new DnsEvent(hostname, ipAddresses, ipAddressesCount,
-                    mPm.getNameForUid(uid), timestamp);
-            sendNetworkEvent(dnsEvent);
         }
 
         @Override
@@ -68,9 +65,6 @@ final class NetworkLogger {
             if (!mIsLoggingEnabled.get()) {
                 return;
             }
-            ConnectEvent connectEvent = new ConnectEvent(ipAddr, port, mPm.getNameForUid(uid),
-                    timestamp);
-            sendNetworkEvent(connectEvent);
         }
 
         private void sendNetworkEvent(NetworkEvent event) {
