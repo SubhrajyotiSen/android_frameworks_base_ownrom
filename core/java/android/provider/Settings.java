@@ -3797,7 +3797,7 @@ public final class Settings {
 
         /**
          * Colors used for the color picker panel puttons
-         * 0: Benzo colors
+         * 0: OwnROM colors
          * 1: Material colors
          * 2: RGB colors
          * default: 0
