@@ -3782,7 +3782,7 @@ public final class Settings {
          */
         public static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
 
-	/**
+	    /**
          * show the membar in recents
          *  @hide
          */
@@ -3794,21 +3794,10 @@ public final class Settings {
         */
         public static final String HIDE_FROM_RECENTS_LIST = "hide_from_recents_list";
 
-
-        /**
-         * Colors used for the color picker panel puttons
-         * 0: OwnROM colors
-         * 1: Material colors
-         * 2: RGB colors
-         * default: 0
-         * @hide
-         */
-        public static final String COLOR_PICKER_PALETTE = "color_picker_palette";
-
-        /* Network speed indicator
+        /** Network speed indicator
          * 0 = disabled
-	 * 1 = show bits per second
-	 * 2 = show Bytes per second
+		 * 1 = show bits per second
+		 * 2 = show Bytes per second
          * @hide
          */
         public static final String STATUS_BAR_TRAFFIC = "status_bar_traffic";
