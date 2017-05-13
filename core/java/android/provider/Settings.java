@@ -3831,6 +3831,12 @@ public final class Settings {
          */
         public static final String NETWORK_TRAFFIC_HIDEARROW = "network_traffic_hidearrow";
 
+	 	/**
+         * Network stats Color style
+         * @hide
+         */
+		public static final String NETWORK_TRAFFIC_COLOR = "network_traffic_color";
+
         /**
          * Colors used for the color picker panel puttons
          * 0: OwnROM colors
