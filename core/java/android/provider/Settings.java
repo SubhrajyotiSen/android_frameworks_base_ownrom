@@ -3941,6 +3941,12 @@ public final class Settings {
         public static final String STATUSBAR_BATTERY_BAR_BLEND_COLORS_REVERSE = "battery_bar_blend_color_reverse";
 
         /**
+         * Alternative recent apps integration using OmniSwitch
+         * @hide
+         */
+        public static final String RECENTS_USE_OMNISWITCH = "recents_use_omniswitch";
+        
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -7090,10 +7096,10 @@ public final class Settings {
         public static final String FORCE_AUTHORIZE_SUBSTRATUM_PACKAGES = "force_authorize_substratum_packages";
 
         /**
-         * Alternative recent apps integration using OmniSwitch
+         * One Handed mode toggle
          * @hide
          */
-        public static final String RECENTS_USE_OMNISWITCH = "recents_use_omniswitch";
+        public static final String ONE_HANDED_MODE_UI = "one_handed_mode_ui";
 
         /**
          * This are the settings to be backed up.

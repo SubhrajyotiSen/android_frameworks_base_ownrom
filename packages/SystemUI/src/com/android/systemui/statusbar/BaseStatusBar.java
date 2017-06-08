@@ -129,6 +129,8 @@ import static android.service.notification.NotificationListenerService.Ranking.I
 import static android.service.notification.NotificationListenerService.Ranking.IMPORTANCE_VERY_LOW;
 import static android.service.notification.NotificationListenerService.Ranking.importanceToLevel;
 
+import com.android.internal.util.own.OmniSwitchConstants;
+
 public abstract class BaseStatusBar extends SystemUI implements
         CommandQueue.Callbacks, ActivatableNotificationView.OnActivatedListener,
         ExpandableNotificationRow.ExpansionLogger, NotificationData.Environment,
@@ -1389,6 +1391,14 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected abstract void toggleSplitScreenMode(int metricsDockAction, int metricsUndockAction);
 
     /** Proxy for RecentsComponent */
+
+    private boolean isOmniSwitchEnabled() {
+        int settingsValue = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.RECENTS_USE_OMNISWITCH, 0
+                , UserHandle.USER_CURRENT);
+        return (settingsValue == 1);
+    }
+
 
     protected void showRecents(boolean triggeredFromAltTab, boolean fromHome) {
         if (isOmniSwitchEnabled()) {
