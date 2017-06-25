@@ -226,7 +226,7 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         SystemServicesProxy ssp = Recents.getSystemServices();
         if (ssp.isRecentsActivityVisible()) {
             // If we have a focused Task, launch that Task now
-            if (mRecentsView.launchFocusedTask(logCategory)) return true;
+            if (mRecentsView.launchFocusedTask(logCategory));
         }
         return false;
     }
@@ -238,7 +238,7 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         SystemServicesProxy ssp = Recents.getSystemServices();
         if (ssp.isRecentsActivityVisible()) {
             // If we have a focused Task, launch that Task now
-            if (mRecentsView.launchPreviousTask()) return true;
+            if (mRecentsView.launchPreviousTask());
             // If none of the other cases apply, then just go Home
             dismissRecentsToHome(true /* animateTaskViews */);
         }
@@ -252,7 +252,7 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         SystemServicesProxy ssp = Recents.getSystemServices();
         if (ssp.isRecentsActivityVisible()) {
             // If we have a focused Task, launch that Task now
-            if (mRecentsView.launchFocusedTask(0 /* logCategory */)) return true;
+            if (mRecentsView.launchFocusedTask(0 /* logCategory */));
             // If none of the other cases apply, then just go Home
             dismissRecentsToHome(true /* animateTaskViews */);
             return true;
@@ -447,6 +447,8 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
 
         setImmersiveRecents();
 
+        boolean showClearAllRecents = Settings.System.getIntForUser(getContentResolver(),
+                Settings.System.SHOW_CLEAR_ALL_RECENTS, 0, UserHandle.USER_CURRENT) != 0;
         // After we have resumed, set the visible state until the next onStop() call
         mIsVisible = true;
     }

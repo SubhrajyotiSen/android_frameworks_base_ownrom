@@ -103,6 +103,12 @@ import android.util.ArraySet;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.view.Display;
 import android.view.IRotationWatcher;
 import android.view.KeyEvent;
@@ -119,11 +125,9 @@ import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.logging.MetricsLogger;
@@ -186,6 +190,7 @@ import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.VisualizerView;
 import com.android.systemui.statusbar.notification.VisualStabilityManager;
+import com.android.systemui.statusbar.phone.ClockController;
 import com.android.systemui.statusbar.phone.UnlockMethodCache.OnUnlockMethodChangedListener;
 import com.android.systemui.statusbar.policy.AccessibilityController;
 import com.android.systemui.statusbar.policy.BatteryController;
@@ -330,6 +335,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             "cmsystem:" + CMSettings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
     private static final String LOCKSCREEN_MEDIA_METADATA =
             "cmsecure:" + CMSettings.Secure.LOCKSCREEN_MEDIA_METADATA;
+    private static final String STATUS_BAR_SHOW_TICKER =
+            "system:" + Settings.System.STATUS_BAR_SHOW_TICKER;
 
     static {
         boolean onlyCoreApps;
@@ -396,6 +403,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     protected StatusBarIconController mIconController;
 
+    // viewgroup containing the normal contents of the statusbar
+    LinearLayout mStatusBarContents;
+    View mCenterClock;
+
     // expanded notifications
     protected NotificationPanelView mNotificationPanel; // the sliding/resizing panel within the notification window
     View mExpandedContents;
@@ -435,6 +446,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     // the tracker view
     int mTrackingPosition; // the position of the top of the tracking view.
+
+    // status bar notification ticker
+    private int mTickerEnabled;
+    private Ticker mTicker;
+    private View mTickerView;
+    private boolean mTicking;
 
     // Tracking finger for opening/closing.
     boolean mTracking;
@@ -630,8 +647,29 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (DEBUG_MEDIA) Log.v(TAG, "DEBUG_MEDIA: onMetadataChanged: " + metadata);
             mMediaMetadata = metadata;
             updateMediaMetaData(true, true);
+            if (mTickerEnabled == 2) {
+                tickTrackInfo();
+            }
         }
     };
+
+    private void tickTrackInfo() {
+        ArrayList<Entry> activeNotifications = mNotificationData.getActiveNotifications();
+        int N = activeNotifications.size();
+        if (PlaybackState.STATE_PLAYING ==
+                getMediaControllerPlaybackState(mMediaController)
+                || PlaybackState.STATE_BUFFERING ==
+                getMediaControllerPlaybackState(mMediaController)) {
+            final String pkg = mMediaController.getPackageName();
+            for (int i = 0; i < N; i++) {
+                final Entry entry = activeNotifications.get(i);
+                if (entry.notification.getPackageName().equals(pkg)) {
+                    tick(entry.notification, true, true, mMediaMetadata);
+                    break;
+                }
+            }
+        }
+    }
 
     private final OnChildLocationsChangedListener mOnChildLocationsChangedListener =
             new OnChildLocationsChangedListener() {
@@ -804,7 +842,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         TunerService.get(mContext).addTunable(this,
                 SCREEN_BRIGHTNESS_MODE,
                 STATUS_BAR_BRIGHTNESS_CONTROL,
-                LOCKSCREEN_MEDIA_METADATA);
+                LOCKSCREEN_MEDIA_METADATA,
+                STATUS_BAR_SHOW_TICKER);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -920,6 +959,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         // figure out which pixel-format to use for the status bar.
         mPixelFormat = PixelFormat.OPAQUE;
+        mStatusBarContents = (LinearLayout)mStatusBarView.findViewById(R.id.status_bar_contents);
 
         mStackScroller = (NotificationStackScrollLayout) mStatusBarWindow.findViewById(
                 R.id.notification_stack_scroller);
@@ -979,7 +1019,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mKeyguardBottomArea.getLockIcon());
         mKeyguardBottomArea.setKeyguardIndicationController(mKeyguardIndicationController);
 
-        // set the initial view visibility
+        mCenterClock = (View) mStatusBarWindow.findViewById(R.id.center_clock);
+        mTickerEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_SHOW_TICKER,
+                0, UserHandle.USER_CURRENT);
+        initTickerView();
+
+        // set the inital view visibility
         setAreThereNotifications();
 
         createIconController();
@@ -1445,6 +1491,21 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return mStatusBarWindow;
     }
 
+    private void initTickerView() {
+        if (mTickerEnabled != 0 && (mTicker == null || mTickerView == null)) {
+            final ViewStub tickerStub = (ViewStub) mStatusBarView.findViewById(R.id.ticker_stub);
+            if (tickerStub != null) {
+                mTickerView = tickerStub.inflate();
+                mTicker = new MyTicker(mContext, mStatusBarView);
+
+                TickerView tickerView = (TickerView) mStatusBarView.findViewById(R.id.tickerText);
+                tickerView.mTicker = mTicker;
+            } else {
+                mTickerEnabled = 0;
+            }
+        }
+    }
+
     public int getStatusBarHeight() {
         if (mNaturalBarHeight < 0) {
             final Resources res = mContext.getResources();
@@ -1661,6 +1722,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 } catch (PendingIntent.CanceledException e) {
                 }
             }
+        } else {
+            tick(notification, true, false, null);
         }
         addNotificationViews(shadeEntry, ranking);
         // Recalculate the position of the sliding windows and the titles.
@@ -1761,6 +1824,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (SPEW) Log.d(TAG, "removeNotification key=" + key + " old=" + old);
 
         if (old != null) {
+            // Cancel the ticker if it's still running
+            if (mTickerEnabled != 0) {
+                mTicker.removeEntry(old);
+            }
             if (CLOSE_PANEL_WHEN_EMPTIED && !hasActiveNotifications()
                     && !mNotificationPanel.isTracking() && !mNotificationPanel.isQsExpanded()) {
                 if (mState == StatusBarState.SHADE) {
@@ -2613,6 +2680,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         if ((diff1 & StatusBarManager.DISABLE_NOTIFICATION_ICONS) != 0) {
             if ((state1 & StatusBarManager.DISABLE_NOTIFICATION_ICONS) != 0) {
+                if (mTicking) {
+                    haltTicker();
+                }
                 mIconController.hideNotificationIconArea(animate);
             } else {
                 mIconController.showNotificationIconArea(animate);
@@ -3311,6 +3381,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             // update low profile
             if ((diff & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
+                final boolean lightsOut = (vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0;
+                if (lightsOut) {
+                    animateCollapsePanels();
+                    if (mTicking) {
+                        haltTicker();
+                    }
+                }
+
                 setAreThereNotifications();
             }
 
@@ -3549,6 +3627,106 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         setNavigationIconHints(flags);
     }
 
+    @Override
+    protected void tick(StatusBarNotification n, boolean firstTime, boolean isMusic, MediaMetadata metaMediaData) {
+        if (mTickerEnabled == 0) return;
+
+        // no ticking in lights-out mode
+        if (!areLightsOn()) return;
+
+        // no ticking in Setup
+        if (!isDeviceProvisioned()) return;
+
+        // not for you
+        if (!isNotificationForCurrentProfiles(n)) return;
+
+        // Show the ticker if one is requested. Also don't do this
+        // until status bar window is attached to the window manager,
+        // because...  well, what's the point otherwise?  And trying to
+        // run a ticker without being attached will crash!
+        if ((!isMusic ? (n.getNotification().tickerText != null) : (metaMediaData != null)) && mStatusBarWindow != null
+                && mStatusBarWindow.getWindowToken() != null) {
+            if (0 == (mDisabled1 & (StatusBarManager.DISABLE_NOTIFICATION_ICONS
+                    | StatusBarManager.DISABLE_NOTIFICATION_TICKER))) {
+                mTicker.addEntry(n, isMusic, metaMediaData);
+            }
+        }
+    }
+
+    private class MyTicker extends Ticker {
+        MyTicker(Context context, View sb) {
+            super(context, sb);
+            if (mTickerEnabled == 0) {
+                Log.w(TAG, "MyTicker instantiated with mTickerEnabled=0", new Throwable());
+            }
+        }
+
+        @Override
+        public void tickerStarting() {
+            if (mTickerEnabled == 0) return;
+            mTicking = true;
+            mStatusBarContents.setVisibility(View.GONE);
+            mStatusBarContents.startAnimation(loadAnim(true, null));
+            if (ClockController.mActiveClock == ClockController.mCenterClock) {
+                mCenterClock.setVisibility(View.GONE);
+                mCenterClock.startAnimation(loadAnim(true, null));
+            }
+            mTickerView.setVisibility(View.VISIBLE);
+            mTickerView.startAnimation(loadAnim(false, null));
+        }
+
+        @Override
+        public void tickerDone() {
+            if (mTickerEnabled == 0) return;
+            mStatusBarContents.setVisibility(View.VISIBLE);
+            mStatusBarContents.startAnimation(loadAnim(false, null));
+            mTickerView.setVisibility(View.GONE);
+            mTickerView.startAnimation(loadAnim(true, mTickingDoneListener));
+            if (ClockController.mActiveClock == ClockController.mCenterClock) {
+                mCenterClock.setVisibility(View.VISIBLE);
+                mCenterClock.startAnimation(loadAnim(false, null));
+            }
+        }
+
+        public void tickerHalting() {
+            if (mTickerEnabled == 0) return;
+            if (mStatusBarContents.getVisibility() != View.VISIBLE) {
+                mStatusBarContents.setVisibility(View.VISIBLE);
+                mStatusBarContents.startAnimation(loadAnim(false, null));
+                if (ClockController.mActiveClock == ClockController.mCenterClock) {
+                    mCenterClock.setVisibility(View.VISIBLE);
+                    mCenterClock.startAnimation(loadAnim(false, null));
+                }
+            }
+            mTickerView.setVisibility(View.GONE);
+            // we do not animate the ticker away at this point, just get rid of it (b/6992707)
+        }
+    }
+
+    Animation.AnimationListener mTickingDoneListener = new Animation.AnimationListener() {
+        public void onAnimationEnd(Animation animation) {
+            mTicking = false;
+        }
+        public void onAnimationRepeat(Animation animation) {
+        }
+        public void onAnimationStart(Animation animation) {
+        }
+    };
+
+    private Animation loadAnim(boolean outAnim, Animation.AnimationListener listener) {
+        AlphaAnimation animation = new AlphaAnimation((outAnim ? 1.0f : 0.0f), (outAnim ? 0.0f : 1.0f));
+        Interpolator interpolator = AnimationUtils.loadInterpolator(mContext,
+                (outAnim ? android.R.interpolator.accelerate_quad : android.R.interpolator.decelerate_quad));
+        animation.setInterpolator(interpolator);
+        animation.setDuration(350);
+
+        if (listener != null) {
+            animation.setAnimationListener(listener);
+        }
+
+        return animation;
+    }
+
     public static String viewInfo(View v) {
         return "[(" + v.getLeft() + "," + v.getTop() + ")(" + v.getRight() + "," + v.getBottom()
                 + ") " + v.getWidth() + "x" + v.getHeight() + "]";
@@ -3560,6 +3738,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             pw.println("Current Status Bar state:");
             pw.println("  mExpandedVisible=" + mExpandedVisible
                     + ", mTrackingPosition=" + mTrackingPosition);
+            pw.println("  mTickerEnabled=" + mTickerEnabled);
+            if (mTickerEnabled != 0) {
+                pw.println("  mTicking=" + mTicking);
+                pw.println("  mTickerView: " + viewInfo(mTickerView));
+            }
             pw.println("  mTracking=" + mTracking);
             pw.println("  mDisplayMetrics=" + mDisplayMetrics);
             pw.println("  mStackScroller: " + viewInfo(mStackScroller));
@@ -4160,6 +4343,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             vibrate();
         }
     };
+
+    @Override
+    protected void haltTicker() {
+        if (mTickerEnabled != 0) {
+            mTicker.halt();
+        }
+    }
 
     @Override
     public boolean shouldDisableNavbarGestures() {
@@ -5527,6 +5717,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 break;
             case LOCKSCREEN_MEDIA_METADATA:
                 mShowMediaMetadata = newValue == null || Integer.parseInt(newValue) == 1;
+                break;
+            case STATUS_BAR_SHOW_TICKER:
+                mTickerEnabled =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                initTickerView();
                 break;
             default:
                 break;

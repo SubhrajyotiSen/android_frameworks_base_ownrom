@@ -3945,7 +3945,19 @@ public final class Settings {
          * @hide
          */
         public static final String RECENTS_USE_OMNISWITCH = "recents_use_omniswitch";
-        
+
+		/**
+         * show clear all recents button
+         *  @hide
+         */
+        public static final String SHOW_CLEAR_ALL_RECENTS = "show_clear_all_recents";
+
+        /**
+         * location of the clear all rectents button
+         * @hide
+         */
+        public static final String  RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
+                
         /**
          * Whether to show Brightness Icon On Brightness Slider
          * @hide
@@ -3953,10 +3965,48 @@ public final class Settings {
         public static final String QS_SHOW_BRIGHTNESS_ICON = "qs_show_brightness_icon";
 
         /**
+
          * Whether to display VoLTE icon when VoLTE present
          * @hide
          */
         public static final String VOLTE_ICON = "volte_icon";
+
+	/***
+         * Wether to show the ticker on the status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_SHOW_TICKER = "status_bar_show_ticker";
+
+        /**
+         * Color of the status bar notification text
+         * @hide
+         */
+        public static final String STATUS_BAR_TICKER_TEXT_COLOR = "status_bar_ticker_text_color";
+
+        /**
+         * Ticker Icon Color
+         * @hide
+         */
+        public static final String STATUS_BAR_TICKER_ICON_COLOR = "status_bar_ticker_icon_color";
+
+        /**
+         * Ticker Font Style
+         * @hide
+         */
+        public static final String STATUS_BAR_TICKER_FONT_STYLE = "status_bar_ticker_font_style";
+
+        /**
+         * Ticker Text Size
+         * @hide
+         */
+        public static final String STATUS_BAR_TICKER_FONT_SIZE = "status_bar_ticker_font_size";
+
+        /**
+         * Dashboard columns in settings
+         * @hide
+         */
+        public static final String DASHBOARD_COLUMNS = "dashboard_columns";
+
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -4015,7 +4065,7 @@ public final class Settings {
             ACCELEROMETER_ROTATION
         };
 
-        /**
+		/**
          * These are all public system settings
          *
          * @hide
